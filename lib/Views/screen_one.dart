@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:udemy_clone/widgets/common_bottom_nav_bar.dart';
+
+import '../widgets/custom_button.dart';
+import '../widgets/mobile_app_bar.dart';
+import '../widgets/web_app_bar.dart';
+import 'break-points.dart';
+import 'screen_two.dart';
 
 class ScreenOne extends StatefulWidget {
   const ScreenOne({super.key});
@@ -10,111 +17,130 @@ class ScreenOne extends StatefulWidget {
 class ScreenOneState extends State<ScreenOne> {
   bool isHovered1 = false;
   bool isHovered2 = false;
+  String currentOption = "";
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        clipBehavior: Clip.none,
+    return LayoutBuilder(builder: (context, constraints) {
+      return Scaffold(
+        bottomNavigationBar: CommonBottomNavBar(
+          leftButton: CustomButton(
+            borderRadius: 0,
+            width: 90,
+            height: 40,
+            borderColor: currentOption.isEmpty ? Colors.grey : Colors.white,
+            buttonColor: currentOption.isEmpty ? Colors.grey : Colors.white,
+            textColor: currentOption.isEmpty ? Colors.black38 : Colors.black,
+            onPressed: currentOption.isEmpty
+                ? () {}
+                : () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => ScreenTwo()));
+                  },
+            text: "Continue",
+          ),
+        ),
         backgroundColor: Colors.black,
-        toolbarHeight: 72.0,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text('MaclayAcademy', style: TextStyle(color: Colors.white)),
-            const SizedBox(
-              width: 32.0,
-            ),
-            VerticalDivider(
-              color: Colors.white,
-              width: 2,
-            ),
-            Text(
-              "Step 1 of 6",
-              style: TextStyle(fontSize: 16, color: Colors.white),
-            ),
-            Spacer(),
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(
-                "Exit",
+        appBar: constraints.maxWidth < mobileBreakPoint
+            ? const PreferredSize(
+                preferredSize: Size(double.infinity, 55.0),
+                child: MobileAppBar(),
+              )
+            : PreferredSize(
+                preferredSize: Size(double.infinity, 72.0),
+                child: WebAppBar(
+                  stepNumberText: "1",
+                  showExitButton: true,
+                ),
+              ),
+
+        body: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "First, let's find out what type of course you're making.",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 28,
                   color: Colors.white,
                 ),
               ),
-            ),
-          ],
-        ),
-      ),
-      body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "First, let's find out what type of course you're making.",
-              style: TextStyle(
-                fontSize: 28,
-                color: Colors.white,
+              const SizedBox(height: 50),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentOption = "Course";
+                      });
+                    },
+                    child: _buildContainer(
+                      "Course",
+                      "Circle rich learning\nexperiences with the help of\nvideo lectures, quizzes, coding\nexercises, etc.",
+                      Icons.play_circle_outline,
+                      isHovered1,
+                      () {
+                        setState(() {
+                          isHovered1 = true;
+                        });
+                      },
+                      () {
+                        setState(() {
+                          isHovered1 = false;
+                        });
+                      },
+                      currentOption == "Course"
+                          ? Colors.amber
+                          : Colors.grey.shade400,
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        currentOption = "Test";
+                      });
+                    },
+                    child: _buildContainer(
+                      "Practise Test",
+                      "Help students prepare for\ncertifications exams by\nproviding practise questions.",
+                      Icons.menu,
+                      isHovered2,
+                      () {
+                        setState(() {
+                          isHovered2 = true;
+                        });
+                      },
+                      () {
+                        setState(() {
+                          isHovered2 = false;
+                        });
+                      },
+                      currentOption == "Test"
+                          ? Colors.amber
+                          : Colors.grey.shade400,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            SizedBox(height: 50),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                _buildContainer(
-                  "Course",
-                  "Circle rich learning\nexperiences with the help of\nvideo lectures, quizzes, coding\nexercises, etc.",
-                  Icons.play_circle_outline,
-                  isHovered1,
-                      () {
-                    setState(() {
-                      isHovered1 = true;
-                    });
-                  },
-                      () {
-                    setState(() {
-                      isHovered1 = false;
-                    });
-                  },
-                ),
-                SizedBox(width: 20),
-                _buildContainer(
-                  "Practise Test",
-                  "Help students prepare for\ncertifications exams by\nproviding practise questions.",
-                  Icons.menu,
-                  isHovered2,
-                      () {
-                    setState(() {
-                      isHovered2 = true;
-                    });
-                  },
-                      () {
-                    setState(() {
-                      isHovered2 = false;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   Widget _buildContainer(
-      String textOne,
-      String textTwo,
-      IconData iconData,
-      bool isHovered,
-      VoidCallback onEnter,
-      VoidCallback onExit,
-      ) {
+    String textOne,
+    String textTwo,
+    IconData iconData,
+    bool isHovered,
+    VoidCallback onEnter,
+    VoidCallback onExit,
+    Color borderColor,
+  ) {
     return MouseRegion(
       onEnter: (_) => onEnter(),
       onExit: (_) => onExit(),
@@ -126,7 +152,7 @@ class ScreenOneState extends State<ScreenOne> {
         decoration: BoxDecoration(
           color: isHovered ? Colors.grey.shade800 : Colors.transparent,
           border: Border.all(
-            color: Colors.grey.shade400,
+            color: borderColor,
           ),
         ),
         child: Column(
