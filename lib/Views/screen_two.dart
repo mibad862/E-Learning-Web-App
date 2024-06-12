@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:udemy_clone/Views/screen_three.dart';
 import 'package:udemy_clone/widgets/common_bottom_nav_bar.dart';
 import 'package:udemy_clone/widgets/web_app_bar.dart';
 
@@ -70,7 +71,7 @@ class ScreenTwoState extends State<ScreenTwo> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const ScreenTwo()));
+                            builder: (context) => const ScreenThree()));
                   },
             text: "Continue",
           ),

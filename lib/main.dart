@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:udemy_clone/Views/home_view.dart';
-import 'package:udemy_clone/Views/screen_three.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Responsive App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const ScreenThree(),
+      home: const HomeView(),
     );
   }
 }

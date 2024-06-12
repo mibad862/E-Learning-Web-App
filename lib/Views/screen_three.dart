@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:udemy_clone/Views/screen_four.dart';
 import 'package:udemy_clone/widgets/common_bottom_nav_bar.dart';
+import 'package:udemy_clone/widgets/common_dropdown_button.dart';
+import 'package:udemy_clone/widgets/custom_button.dart';
+import 'package:udemy_clone/widgets/mobile_app_bar.dart';
 import 'package:udemy_clone/widgets/web_app_bar.dart';
 
-import '../widgets/custom_button.dart';
-import '../widgets/mobile_app_bar.dart';
 import 'break-points.dart';
 
 class ScreenThree extends StatefulWidget {
@@ -16,32 +17,12 @@ class ScreenThree extends StatefulWidget {
 }
 
 class ScreenThreeState extends State<ScreenThree> {
-  bool isHovered1 = false;
-  bool isHovered2 = false;
-  String currentOption = "";
-  final TextEditingController _textFieldController = TextEditingController();
-  bool isTextFieldEmpty = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _textFieldController.addListener(_checkTextField);
-  }
-
-  @override
-  void dispose() {
-    _textFieldController.dispose();
-    super.dispose();
-  }
-
-  void _checkTextField() {
-    setState(() {
-      isTextFieldEmpty = _textFieldController.text.isEmpty;
-    });
-  }
+  String dropdownValue = 'Choose a category';
 
   @override
   Widget build(BuildContext context) {
+    bool isDropDownEmpty = dropdownValue == 'Choose a category';
+
     return LayoutBuilder(builder: (context, constraints) {
       return Scaffold(
         bottomNavigationBar: CommonBottomNavBar(
@@ -61,33 +42,34 @@ class ScreenThreeState extends State<ScreenThree> {
             borderRadius: 0,
             width: 90,
             height: 40,
-            borderColor: isTextFieldEmpty ? Colors.grey : Colors.white,
-            buttonColor: isTextFieldEmpty ? Colors.grey : Colors.white,
-            textColor: isTextFieldEmpty ? Colors.black38 : Colors.black,
-            onPressed: isTextFieldEmpty
+            borderColor: isDropDownEmpty ? Colors.grey : Colors.white,
+            buttonColor: isDropDownEmpty ? Colors.grey : Colors.white,
+            textColor: isDropDownEmpty ? Colors.black38 : Colors.black,
+            onPressed: isDropDownEmpty
                 ? () {}
                 : () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const ScreenThree()));
-            },
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ScreenFour()),
+                    );
+                  },
             text: "Continue",
           ),
         ),
         backgroundColor: Colors.black,
         appBar: constraints.maxWidth < mobileBreakPoint
             ? const PreferredSize(
-          preferredSize: Size(double.infinity, 55.0),
-          child: MobileAppBar(),
-        )
-            : PreferredSize(
-          preferredSize: Size(double.infinity, 72.0),
-          child: WebAppBar(
-            stepNumberText: "3",
-            showExitButton: true,
-          ),
-        ),
+                preferredSize: Size(double.infinity, 55.0),
+                child: MobileAppBar(),
+              )
+            : const PreferredSize(
+                preferredSize: Size(double.infinity, 72.0),
+                child: WebAppBar(
+                  stepNumberText: "3",
+                  showExitButton: true,
+                ),
+              ),
         body: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -108,22 +90,33 @@ class ScreenThreeState extends State<ScreenThree> {
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 50),
-              SizedBox(
-                width: 600,
-                height: 80,
-                child: TextField(
-                  controller: _textFieldController,
-                  maxLength: 60,
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.w300),
-                  decoration: InputDecoration(
-                    hintStyle: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w300),
-                    hintText: "e.g. Learn Photoshop CS6 from Scratch",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
+              const SizedBox(height: 60),
+              CommonDropdownButton(
+                dropDownWidth: 550,
+                hintText: 'Choose a category',
+                value: dropdownValue,
+                onChanged: (newValue) {
+                  setState(() {
+                    dropdownValue = newValue as String;
+                  });
+                },
+                items: const <String>[
+                  'Choose a category',
+                  'Development',
+                  'Business',
+                  'Finance & Accounting',
+                  'IT & Software',
+                  'Office Productivity',
+                  'Personal Development',
+                  'Design',
+                  'Marketing',
+                  'Lifestyle',
+                  'Photography & Video',
+                  'Health & Fitness',
+                  'Music',
+                  'Teaching & Academics',
+                  "I don't know yet"
+                ],
               ),
             ],
           ),

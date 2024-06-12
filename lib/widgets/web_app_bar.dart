@@ -57,7 +57,7 @@ class _WebAppBarState extends State<WebAppBar> {
               )),
           const SizedBox(width: 50.0),
           if (widget.stepNumberText != null) ...[
-            Text('Step ${widget.stepNumberText} of 6',
+            Text('Step ${widget.stepNumberText} of 4',
                 style: const TextStyle(
                   letterSpacing: 1.0,
                   color: Colors.white,
