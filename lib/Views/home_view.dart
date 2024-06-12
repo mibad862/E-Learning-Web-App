@@ -282,6 +282,7 @@ class _HomeViewState extends State<HomeView> {
                           ),
                           const SizedBox(width: 25),
                           const CommonDropdownButton(
+                            dropDownWidth: 180,
                             hintText: "Newest",
                             items: [
                               "Newest",
